@@ -30,18 +30,23 @@ public class Application {
 		// Transformation
 		df = df.withColumn("full_name", 
 				concat(df.col("last_name"), lit(", "), df.col("first_name")))
-				.filter(df.col("comment").rlike("\\d+"))
+			//	.filter(df.col("comment").rlike("\\d+"))
 				.orderBy(df.col("last_name").asc());
+		df.show();
 		
 		// Write to destination
-		String dbConnectionUrl = "jdbc:postgresql://localhost/course_data"; // <<- You need to create this database
-		Properties prop = new Properties();
-	    prop.setProperty("driver", "org.postgresql.Driver");
-	    prop.setProperty("user", "postgres");
-	    prop.setProperty("password", "password"); // <- The password you used while installing Postgres
-	    
-	    df.write()
-	    	.mode(SaveMode.Overwrite)
-	    	.jdbc(dbConnectionUrl, "project1", prop);
+//		String dbConnectionUrl = "jdbc:postgresql://localhost/course_data"; // <<- You need to create this database
+//		Properties prop = new Properties();
+//	    prop.setProperty("driver", "org.postgresql.Driver");
+//	    prop.setProperty("user", "postgres");
+//	    prop.setProperty("password", "password"); // <- The password you used while installing Postgres
+//
+//	    df.write()
+//	    	.mode(SaveMode.Overwrite)
+//	    	.jdbc(dbConnectionUrl, "project1", prop);
+		df.write()
+				.mode(SaveMode.Overwrite)
+				//.format("json")
+				.json("src/main/resources/name_and_comments_output");
 	}
 }
